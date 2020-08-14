@@ -15,6 +15,18 @@
           sigle-line
         />
       </v-card-title>
+      <v-btn
+        fab
+        dark
+        small
+        color="dark"
+        class="mb-2"
+        @click="add"
+      >
+        <v-icon dark>
+          mdi-plus
+        </v-icon>
+      </v-btn>
       <v-data-table
         :headers="headers"
         :items="todos"
@@ -28,7 +40,7 @@
           <v-dialog v-model="dialog" max-width="500px">
             <v-card>
               <v-card-title>
-                <span class="headline">TODO編集</span>
+                <span class="headline">{{ formTitle }}</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
@@ -41,12 +53,9 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn @click="close">
-                  閉じる
-                </v-btn>
-                <v-btn class="primary" @click="update">
-                  更新する
-                </v-btn>
+                <v-btn @click="close">閉じる</v-btn>
+                <v-btn v-if="isPersistedUser" class="primary" @click="update">更新する</v-btn>
+                <v-btn v-else class="primary" @click="create">追加する</v-btn>
                 <v-spacer />
               </v-card-actions>
             </v-card>
@@ -87,9 +96,24 @@ export default {
   computed: {
     todos () {
       return this.$store.getters.getTodos
+    },
+    isPersistedTodo () {
+      return !!this.todo.id
+    },
+    formTitle () {
+      return this.isPersistedTodo ? 'TODO編集' : 'TODO追加'
     }
   },
   methods: {
+    add (todo) {
+      this.todo = {}
+      this.dialog = true
+    },
+    create () {
+      const payload = { todo: this.todo }
+      this.$store.commit('addTodo', payload)
+      this.close()
+    },
     edit (todo) {
       this.todo = Object.assign({}, todo)
       this.dialog = true
