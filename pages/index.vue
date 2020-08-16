@@ -53,9 +53,15 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn @click="close">閉じる</v-btn>
-                <v-btn v-if="isPersistedUser" class="primary" @click="update">更新する</v-btn>
-                <v-btn v-else class="primary" @click="create">追加する</v-btn>
+                <v-btn @click="close">
+                  閉じる
+                </v-btn>
+                <v-btn v-if="isPersistedTodo" class="primary" @click="update">
+                  更新する
+                </v-btn>
+                <v-btn v-else class="primary" @click="create">
+                  追加する
+                </v-btn>
                 <v-spacer />
               </v-card-actions>
             </v-card>
@@ -81,7 +87,13 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
+  async asyncData ({ app }) {
+    const response = await axios.get('http://localhost:3000/api/todos')
+    return { todos: response.data }
+  },
   data () {
     return {
       search: '',
@@ -94,9 +106,6 @@ export default {
     }
   },
   computed: {
-    todos () {
-      return this.$store.getters.getTodos
-    },
     isPersistedTodo () {
       return !!this.todo.id
     },
@@ -109,23 +118,23 @@ export default {
       this.todo = {}
       this.dialog = true
     },
-    create () {
-      const payload = { todo: this.todo }
-      this.$store.commit('addTodo', payload)
+    async create () {
+      await axios.post('http://localhost:3000/api/todos', this.todo)
+        .then(() => { this.$router.app.refresh() })
       this.close()
     },
     edit (todo) {
       this.todo = Object.assign({}, todo)
       this.dialog = true
     },
-    update () {
-      const payload = { todo: this.todo }
-      this.$store.commit('updateTodo', payload)
+    async update () {
+      await axios.put('http://localhost:3000/api/todos/' + this.todo.id, this.todo)
+        .then(() => { this.$router.app.refresh() })
       this.close()
     },
-    remove (todo) {
-      const payload = { todo }
-      this.$store.commit('removeTodo', payload)
+    async remove (todo) {
+      await axios.delete('http://localhost:3000/api/todos/' + todo.id, todo)
+        .then(() => { this.$router.app.refresh() })
     },
     close () {
       this.dialog = false
