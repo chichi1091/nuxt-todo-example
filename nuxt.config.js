@@ -63,7 +63,7 @@ export default {
   axios: {
   },
   proxy: {
-    '/api/': { target: 'http://localhost:8080', pathRewrite: { '^/api/': '' } }
+    '/api/': { target: process.env.API_URL || 'http://localhost:8080', pathRewrite: { '^/api/': '' } }
   },
   /*
   ** vuetify module configuration
