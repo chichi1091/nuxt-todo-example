@@ -91,7 +91,7 @@ import axios from 'axios'
 
 export default {
   async asyncData ({ app }) {
-    const response = await axios.get('http://localhost:3000/api/todos')
+    const response = await axios.get('/api/todos')
     return { todos: response.data }
   },
   data () {
@@ -119,7 +119,7 @@ export default {
       this.dialog = true
     },
     async create () {
-      await axios.post('http://localhost:3000/api/todos', this.todo)
+      await axios.post('/api/todos', this.todo)
         .then(() => { this.$router.app.refresh() })
       this.close()
     },
@@ -128,12 +128,12 @@ export default {
       this.dialog = true
     },
     async update () {
-      await axios.put('http://localhost:3000/api/todos/' + this.todo.id, this.todo)
+      await axios.put('/api/todos/' + this.todo.id, this.todo)
         .then(() => { this.$router.app.refresh() })
       this.close()
     },
     async remove (todo) {
-      await axios.delete('http://localhost:3000/api/todos/' + todo.id, todo)
+      await axios.delete('/api/todos/' + todo.id, todo)
         .then(() => { this.$router.app.refresh() })
     },
     close () {
