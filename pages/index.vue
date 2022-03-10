@@ -16,6 +16,7 @@
         />
       </v-card-title>
       <v-btn
+        id="add"
         fab
         dark
         small
@@ -46,7 +47,7 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12">
-                      <v-text-field v-model="todo.task" label="タスク" />
+                      <v-text-field id="taskName" v-model="todo.task" label="タスク" />
                     </v-col>
                   </v-row>
                 </v-container>
@@ -59,7 +60,7 @@
                 <v-btn v-if="isPersistedTodo" class="primary" @click="update">
                   更新する
                 </v-btn>
-                <v-btn v-else class="primary" @click="create">
+                <v-btn v-else id="new" class="primary" @click="create">
                   追加する
                 </v-btn>
                 <v-spacer />
