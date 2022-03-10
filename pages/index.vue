@@ -76,6 +76,7 @@
             mdi-pencil
           </v-icon>
           <v-icon
+            id="del"
             small
             @click="remove(item)"
           >
