@@ -38,7 +38,7 @@
         class="elevation-1"
       >
         <template v-slot:top>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog id="dialog" v-model="dialog" max-width="500px">
             <v-card>
               <v-card-title>
                 <span class="headline">{{ formTitle }}</span>
